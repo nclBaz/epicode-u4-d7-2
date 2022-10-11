@@ -15,8 +15,10 @@ import {
 } from "./errorHandlers.js"
 
 const server = express()
-const port = 3001
+const port = process.env.PORT || 3001
 const publicFolderPath = join(process.cwd(), "./public")
+
+console.log(process.env.MONGO_CONNECTION_STRING)
 
 // *************************************** MIDDLEWARES *************************************
 

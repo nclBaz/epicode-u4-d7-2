@@ -9,8 +9,6 @@ const booksJSONPath = join(dataFolderPath, "books.json")
 const usersJSONPath = join(dataFolderPath, "users.json")
 const usersPublicFolderPath = join(process.cwd(), "./public/img/users")
 
-console.log("USERS PUBLIC FOLDER --> ", usersPublicFolderPath)
-
 export const getUsers = () => readJSON(usersJSONPath)
 export const writeUsers = usersArray => writeJSON(usersJSONPath, usersArray)
 export const getBooks = () => readJSON(booksJSONPath)

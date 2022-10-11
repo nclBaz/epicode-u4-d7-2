@@ -35,8 +35,6 @@ const usersJSONPath = join(
   "users.json"
 )
 
-console.log("TARGET --> ", usersJSONPath)
-
 // ************************************************************************************************
 
 const usersRouter = express.Router()

@@ -22,11 +22,6 @@ const { BadRequest, NotFound } = createHttpError
 
 const booksRouter = express.Router()
 
-const anotherStupidMiddleware = (req, res, next) => {
-  console.log("Hey I am the stupid middleware")
-  next()
-}
-
 booksRouter.post(
   "/",
   checkBooksSchema,
@@ -48,7 +43,7 @@ booksRouter.post(
   }
 )
 
-booksRouter.get("/", anotherStupidMiddleware, async (req, res, next) => {
+booksRouter.get("/", async (req, res, next) => {
   try {
     // throw new Error("KABOOOOOOOOOOOOOOOOOOOOOOOOM!")
     const books = await getBooks()

@@ -18,32 +18,43 @@ const server = express()
 const port = process.env.PORT || 3001
 const publicFolderPath = join(process.cwd(), "./public")
 
-console.log(process.env.MONGO_CONNECTION_STRING)
-
 // *************************************** MIDDLEWARES *************************************
 
-/* const { Unauthorized } = createHttpError
+/* ****************************************** CORS *****************************************
 
-const loggerMiddleware = (req, res, next) => {
-  console.log(
-    `Request method: ${req.method} -- request url: ${req.url} -- ${new Date()}`
-  )
-  req.user = "Riccardo"
-  next()
-}
+CROSS-ORIGIN RESOURCE SHARING
 
-const policeOfficer = (req, res, next) => {
-  if (req.user === "Riccardo") {
-    next(Unauthorized("Riccardos are not allowed!"))
-  } else {
-    next()
-  }
-}
+Cross-Origin Requests:
 
-server.use(loggerMiddleware)
-server.use(policeOfficer) */
+1. FE=http://localhost:3000 BE=http://localhost:3001 <-- 2 different port numbers they represent 2 different origins
+2. FE=https://mywonderfulfe.com BE=https://mywonderfulbe.com <-- 2 different domains they represent 2 different origins
+3. FE=https://domain.com BE=http://domain.com <-- 2 different protocols they represent 2 different origins
+
+*/
+
+const whitelist = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
+
 server.use(express.static(publicFolderPath))
-server.use(cors())
+server.use(
+  cors({
+    origin: (origin, corsNext) => {
+      console.log("CURRENT ORIGIN :", origin)
+
+      if (!origin || whitelist.indexOf(origin) !== -1) {
+        // if origin is in the whitelist you can move next
+        corsNext(null, true)
+      } else {
+        // if origin is NOT in the whitelist --> trigger an error
+        corsNext(
+          createHttpError(
+            400,
+            `CORS error! your origin ${origin} is not on the list!`
+          )
+        )
+      }
+    },
+  })
+)
 server.use(express.json()) // If you don't add this line BEFORE the endpoints, all requests' bodies will be UNDEFINED
 
 // ************************************* ENDPOINTS ******************************************
